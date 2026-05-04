@@ -104,32 +104,57 @@ st.markdown("""
     /* ---------------------------------
        INPUT FIELDS & HIGH CONTRAST
        --------------------------------- */
-    /* Forced solid dark background for input areas so text pops */
-    div[data-baseweb="textarea"] > div,
-    [data-testid="stFileUploadDropzone"] {
+    div[data-baseweb="textarea"] > div {
         background-color: #1e293b !important; 
         border: 2px solid #334155 !important;
         border-radius: 16px;
         transition: all 0.3s ease;
     }
-    div[data-baseweb="textarea"] > div:focus-within,
-    [data-testid="stFileUploadDropzone"]:hover {
+    div[data-baseweb="textarea"] > div:focus-within {
         border-color: #0ea5e9 !important;
         box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15) !important;
         background-color: #0f172a !important;
     }
-    /* Bright text for the user input */
     textarea {
         color: #ffffff !important;
         font-size: 1.05rem !important;
         padding: 1.2rem !important;
     }
-    /* Highly visible placeholder text */
     textarea::placeholder {
         color: #94a3b8 !important;
         opacity: 1 !important;
     }
 
+    /* --- FILE UPLOADER FIXES --- */
+    [data-testid="stFileUploadDropzone"] {
+        background-color: #1e293b !important;
+        border: 2px dashed #475569 !important;
+        border-radius: 16px;
+        padding: 2rem !important;
+    }
+    [data-testid="stFileUploadDropzone"]:hover {
+        border-color: #0ea5e9 !important;
+        background-color: #0f172a !important;
+    }
+    /* Force inner text to be bright */
+    [data-testid="stFileUploadDropzone"] * {
+        color: #f8fafc !important;
+    }
+    /* Style the "Browse files" button */
+    [data-testid="stFileUploadDropzone"] button {
+        background-color: #334155 !important;
+        color: #ffffff !important;
+        border: 1px solid #475569 !important;
+        border-radius: 8px !important;
+    }
+    [data-testid="stFileUploadDropzone"] button:hover {
+        border-color: #0ea5e9 !important;
+        color: #0ea5e9 !important;
+    }
+
+    /* ---------------------------------
+       BUTTONS
+       --------------------------------- */
     button[kind="primary"] {
         background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%) !important;
         color: white !important;
@@ -267,7 +292,9 @@ with tab2:
     </div>
     """, unsafe_allow_html=True)
 
-    uploaded_resume = st.file_uploader("Upload your resume (PDF format)", type=["pdf"])
+    # Added custom high-contrast label instead of standard invisible label
+    st.markdown('<span class="input-label">📄 UPLOAD YOUR RESUME (PDF)</span>', unsafe_allow_html=True)
+    uploaded_resume = st.file_uploader("resume_uploader", type=["pdf"], label_visibility="collapsed")
     
     st.markdown('<span class="input-label" style="margin-top: 1rem;">🎯 PASTE THE TARGET JOB DESCRIPTION</span>', unsafe_allow_html=True)
     job_target = st.text_area(
