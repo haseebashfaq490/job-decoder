@@ -8,7 +8,7 @@ load_dotenv()
 st.set_page_config(
     page_title="Job Description Decoder",
     page_icon="🔍",
-    layout="centered" # Centered looks more like a polished web app tool
+    layout="centered"
 )
 
 # --- ADVANCED CSS STYLING ---
@@ -28,7 +28,7 @@ st.markdown("""
 
     /* Adjust main container padding */
     .block-container {
-        padding-top: 3rem;
+        padding-top: 2.5rem;
         padding-bottom: 3rem;
         max-width: 850px;
     }
@@ -41,67 +41,75 @@ st.markdown("""
     }
 
     .hero-title {
-        font-size: 3.5rem;
+        font-size: 3.8rem;
         font-weight: 800;
         letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+        background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
-        line-height: 1.2;
+        margin-bottom: 1rem;
+        line-height: 1.1;
     }
 
     .hero-subtitle {
-        font-size: 1.1rem;
-        color: #a1a1aa;
-        max-width: 600px;
+        font-size: 1.15rem;
+        color: #e4e4e7; /* BRIGHTENED from previous muted gray */
+        max-width: 650px;
         margin: 0 auto 1.5rem auto;
-        line-height: 1.5;
+        line-height: 1.6;
+    }
+    
+    .viral-hook {
+        color: #818cf8;
+        font-weight: 700;
+        font-size: 1.3rem;
+        display: block;
+        margin-bottom: 0.5rem;
     }
 
     /* Feature Pills */
     .pill-container {
         display: flex;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
         flex-wrap: wrap;
         margin-bottom: 2rem;
     }
     .feature-pill {
-        background: rgba(99, 102, 241, 0.1);
-        border: 1px solid rgba(99, 102, 241, 0.2);
-        color: #818cf8;
-        padding: 0.25rem 0.75rem;
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        color: #c7d2fe; /* Brightened text */
+        padding: 0.4rem 1rem;
         border-radius: 9999px;
-        font-size: 0.85rem;
-        font-weight: 500;
+        font-size: 0.9rem;
+        font-weight: 600;
         letter-spacing: 0.02em;
         backdrop-filter: blur(4px);
     }
 
-    /* Target Streamlit's Native Text Area */
+    /* Target Streamlit's Native Text Area - FIXED CONTRAST */
     div[data-baseweb="textarea"] > div {
-        background-color: rgba(24, 24, 27, 0.6) !important;
-        border: 1px solid #27272a !important;
+        background-color: rgba(9, 9, 11, 0.8) !important; /* Darker background */
+        border: 1px solid #3f3f46 !important; /* Brighter border */
         border-radius: 12px;
         transition: all 0.2s ease;
     }
     div[data-baseweb="textarea"] > div:hover {
-        border-color: #3f3f46 !important;
+        border-color: #52525b !important;
     }
     div[data-baseweb="textarea"] > div:focus-within {
         border-color: #6366f1 !important;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
-        background-color: rgba(24, 24, 27, 0.9) !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+        background-color: rgba(9, 9, 11, 0.95) !important;
     }
     textarea {
-        color: #f4f4f5 !important;
+        color: #ffffff !important; /* Bright white text when typing */
         font-size: 1rem !important;
         padding: 1rem !important;
         line-height: 1.6 !important;
     }
     textarea::placeholder {
-        color: #52525b !important;
+        color: #a1a1aa !important; /* Brightened placeholder text so it's readable */
     }
 
     /* Target Streamlit's Native Primary Button */
@@ -111,9 +119,9 @@ st.markdown("""
         border: none !important;
         border-radius: 12px !important;
         padding: 1.5rem !important;
-        font-size: 1.1rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.01em !important;
+        font-size: 1.2rem !important; /* Made button text slightly larger */
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
         transition: all 0.3s ease !important;
         box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39) !important;
     }
@@ -125,34 +133,34 @@ st.markdown("""
 
     /* Secondary Download Button */
     button[kind="secondary"] {
-        background: rgba(39, 39, 42, 0.5) !important;
-        border: 1px solid #3f3f46 !important;
-        color: #e4e4e7 !important;
+        background: rgba(39, 39, 42, 0.8) !important;
+        border: 1px solid #52525b !important;
+        color: #ffffff !important;
         border-radius: 8px !important;
         transition: all 0.2s ease !important;
     }
     button[kind="secondary"]:hover {
         border-color: #6366f1 !important;
-        color: white !important;
+        background: rgba(63, 63, 70, 1) !important;
     }
 
     /* Output Markdown Styling */
     .stMarkdown h2 {
         color: #e0e7ff !important;
-        font-size: 1.25rem !important;
+        font-size: 1.3rem !important;
         font-weight: 700 !important;
         margin-top: 2rem !important;
         margin-bottom: 1rem !important;
         padding-bottom: 0.5rem !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
     .stMarkdown p, .stMarkdown li {
-        color: #a1a1aa !important;
-        font-size: 1rem !important;
+        color: #e4e4e7 !important; /* Brightened output text */
+        font-size: 1.05rem !important;
         line-height: 1.7 !important;
     }
     .stMarkdown strong {
-        color: #f4f4f5 !important;
+        color: #ffffff !important;
     }
 
     /* Sidebar Styling */
@@ -160,14 +168,18 @@ st.markdown("""
         background-color: #09090b !important;
         border-right: 1px solid #27272a !important;
     }
+    [data-testid="stSidebar"] * {
+        color: #e4e4e7 !important; /* Forced all sidebar text to be brighter */
+    }
     
     /* Input Label styling */
     .input-label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #a1a1aa;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #e4e4e7;
         margin-bottom: 0.5rem;
         display: block;
+        letter-spacing: 0.05em;
     }
 
     @keyframes fadeIn {
@@ -196,20 +208,21 @@ with st.sidebar:
     - 🔮 The one-line truth
     """)
     st.divider()
-    st.markdown("<small style='color:#52525b'>Built with Groq + Llama 3<br>Open source</small>", unsafe_allow_html=True)
+    st.markdown("<small style='color:#a1a1aa'>Built with Groq + Llama 3<br>Open source</small>", unsafe_allow_html=True)
 
 # --- HERO SECTION ---
 st.markdown("""
 <div class="hero-container">
     <div class="hero-title">Job Description Decoder</div>
     <div class="hero-subtitle">
-        Paste any job posting. AI reveals what the company actually wants, hidden red flags, salary estimates, and exactly what to say in your application.
+        <span class="viral-hook">Decode any job description in 10 seconds. ⚡</span>
+        Stop guessing. Paste the corporate jargon below and let AI reveal the hidden red flags, the <em>real</em> salary range, and exactly what to say to get hired.
     </div>
     <div class="pill-container">
         <span class="feature-pill">🚩 Red Flag Detector</span>
         <span class="feature-pill">💰 Salary Estimator</span>
         <span class="feature-pill">🎯 Skill Matcher</span>
-        <span class="feature-pill">⚡ 10 Second Analysis</span>
+        <span class="feature-pill">🔮 Culture Translator</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -224,18 +237,15 @@ job_desc = st.text_area(
     label_visibility="collapsed"
 )
 
-# Note the `type="primary"` flag which hooks into our custom CSS
-decode_btn = st.button("🔍 Decode this job", type="primary", use_container_width=True)
+decode_btn = st.button("🚀 Decode this job now", type="primary", use_container_width=True)
 
-st.markdown("<br>", unsafe_allow_html=True) # Spacer
+st.markdown("<br>", unsafe_allow_html=True)
 
 # --- APP LOGIC ---
 if decode_btn:
     if not job_desc.strip():
         st.error("⚠️ Please paste a job description first.")
     else:
-        # Groq Client Initialization
-        # Note: Added error handling for missing API keys which is a best practice
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
             st.error("⚠️ GROQ_API_KEY is not set in the environment variables.")
@@ -281,16 +291,13 @@ JOB DESCRIPTION:
                 )
                 result = response.choices[0].message.content
 
-                # Results Presentation
                 st.success("Analysis Complete!")
                 
-                # We wrap the results in an expander or just a nice container
                 with st.container():
                     st.markdown(result)
                 
                 st.markdown("<br>", unsafe_allow_html=True)
                 
-                # Download button defaults to secondary styling in our CSS
                 st.download_button(
                     label="⬇️ Download full analysis as .txt",
                     data=result,
