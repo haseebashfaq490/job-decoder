@@ -12,7 +12,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- FUTURISTIC NEON CSS STYLING ---
+# --- PREMIUM MODERN CSS STYLING ---
 st.markdown("""
 <style>
     /* Hide default Streamlit clutter */
@@ -20,10 +20,10 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* Futuristic Dark Theme Background */
+    /* Professional Dark Theme Background */
     .stApp {
-        background-color: #0b0f19;
-        background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0f19 80%);
+        background-color: #0f172a;
+        background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #0f172a 80%);
         color: #f8fafc;
     }
 
@@ -37,15 +37,14 @@ st.markdown("""
        MODERN GLOWING TABS
        --------------------------------- */
     div[data-baseweb="tab_list"] {
-        background-color: rgba(17, 24, 39, 0.7);
+        background-color: rgba(30, 41, 59, 0.8);
         border-radius: 20px;
         padding: 5px;
-        border: 1px solid rgba(56, 189, 248, 0.15);
-        box-shadow: 0 0 20px rgba(56, 189, 248, 0.05);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         display: flex;
         justify-content: center;
-        margin-bottom: 2rem;
-        backdrop-filter: blur(10px);
+        margin-bottom: 2.5rem;
     }
     button[data-baseweb="tab"] {
         border-radius: 15px !important;
@@ -59,13 +58,13 @@ st.markdown("""
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     button[data-baseweb="tab"]:hover {
-        color: #e2e8f0 !important;
+        color: #f1f5f9 !important;
         background-color: rgba(255, 255, 255, 0.05) !important;
     }
     button[data-baseweb="tab"][aria-selected="true"] {
-        background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%) !important;
+        background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%) !important;
         color: white !important;
-        box-shadow: 0 0 20px rgba(139, 92, 246, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4) !important;
     }
 
     /* ---------------------------------
@@ -77,18 +76,17 @@ st.markdown("""
         animation: fadeIn 0.8s ease-out;
     }
     .hero-title {
-        font-size: 4rem;
+        font-size: 3.8rem;
         font-weight: 900;
-        letter-spacing: -0.03em;
-        background: linear-gradient(to right, #e0f2fe, #38bdf8, #c084fc);
+        letter-spacing: -0.02em;
+        background: linear-gradient(to right, #ffffff, #e0f2fe, #bae6fd);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 40px rgba(56, 189, 248, 0.2);
         margin-bottom: 0.5rem;
         line-height: 1.1;
     }
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         color: #cbd5e1;
         max-width: 650px;
         margin: 0 auto 1.5rem auto;
@@ -97,77 +95,77 @@ st.markdown("""
     .viral-hook {
         color: #38bdf8;
         font-weight: 800;
-        font-size: 1.4rem;
+        font-size: 1.35rem;
         display: block;
         margin-bottom: 0.5rem;
-        text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-        letter-spacing: 0.02em;
-        text-transform: uppercase;
+        letter-spacing: 0.01em;
     }
 
     /* ---------------------------------
-       INPUT FIELDS & BUTTONS
+       INPUT FIELDS & HIGH CONTRAST
        --------------------------------- */
+    /* Forced solid dark background for input areas so text pops */
     div[data-baseweb="textarea"] > div,
     [data-testid="stFileUploadDropzone"] {
-        background-color: rgba(15, 23, 42, 0.6) !important;
-        border: 1px solid rgba(56, 189, 248, 0.2) !important;
+        background-color: #1e293b !important; 
+        border: 2px solid #334155 !important;
         border-radius: 16px;
         transition: all 0.3s ease;
-        backdrop-filter: blur(12px);
     }
     div[data-baseweb="textarea"] > div:focus-within,
     [data-testid="stFileUploadDropzone"]:hover {
-        border-color: #8b5cf6 !important;
-        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3), 0 0 20px rgba(139, 92, 246, 0.15) !important;
-        background-color: rgba(15, 23, 42, 0.9) !important;
+        border-color: #0ea5e9 !important;
+        box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15) !important;
+        background-color: #0f172a !important;
     }
+    /* Bright text for the user input */
     textarea {
-        color: #f8fafc !important;
+        color: #ffffff !important;
         font-size: 1.05rem !important;
         padding: 1.2rem !important;
     }
+    /* Highly visible placeholder text */
     textarea::placeholder {
-        color: #64748b !important;
+        color: #94a3b8 !important;
+        opacity: 1 !important;
     }
 
     button[kind="primary"] {
-        background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%) !important;
+        background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%) !important;
         color: white !important;
         border: none !important;
-        border-radius: 14px !important;
+        border-radius: 12px !important;
         padding: 1.5rem !important;
-        font-size: 1.25rem !important;
-        font-weight: 800 !important;
-        letter-spacing: 0.03em !important;
-        text-transform: uppercase !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
         margin-top: 1rem !important;
     }
     button[kind="primary"]:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: 0 8px 25px rgba(56, 189, 248, 0.5) !important;
-        background: linear-gradient(135deg, #7dd3fc 0%, #a78bfa 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4) !important;
+        background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%) !important;
     }
 
     /* Output Markdown Styling */
     .stMarkdown h2 {
         color: #bae6fd !important;
-        font-size: 1.4rem !important;
-        font-weight: 800 !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
         margin-top: 2rem !important;
         border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
         padding-bottom: 0.5rem !important;
     }
     
     .input-label {
-        font-size: 0.9rem;
-        font-weight: 700;
-        color: #94a3b8;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #e2e8f0;
         margin-bottom: 0.5rem;
         display: block;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
     }
 
@@ -187,27 +185,27 @@ tab1, tab2 = st.tabs(["🔍 Job Decoder", "📄 Resume Grader"])
 with tab1:
     st.markdown("""
     <div class="hero-container">
-        <div class="hero-title">Decode The Matrix</div>
+        <div class="hero-title">Job Description Translator</div>
         <div class="hero-subtitle">
-            <span class="viral-hook">Expose any job description in 10 seconds.</span>
-            Corporate jargon is designed to hide the truth. Paste the job post below and let autonomous AI extract the real salary, red flags, and exact skills they are actually filtering for.
+            <span class="viral-hook">Cut through corporate jargon in 10 seconds. ⚡</span>
+            Stop guessing what hiring managers want. Paste the job post below and let AI reveal the hidden red flags, the true salary range, and the exact skills they are filtering for.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<span class="input-label">Terminal Input // Paste Job Description</span>', unsafe_allow_html=True)
+    st.markdown('<span class="input-label">📋 PASTE THE FULL JOB DESCRIPTION BELOW</span>', unsafe_allow_html=True)
     job_desc = st.text_area(
         label="job_decode",
         height=280,
-        placeholder="e.g. 'Looking for a rockstar ninja to wear many hats in a fast-paced environment...'",
+        placeholder="e.g. 'We are looking for a rockstar to wear many hats in a fast-paced environment...'",
         label_visibility="collapsed"
     )
 
-    decode_btn = st.button("Initialize Decode Sequence ⚡", type="primary", use_container_width=True, key="btn_decode")
+    decode_btn = st.button("Decode this job now 🚀", type="primary", use_container_width=True, key="btn_decode")
 
     if decode_btn:
         if not job_desc.strip():
-            st.error("⚠️ Terminal empty: Please paste a job description first.")
+            st.error("⚠️ Please paste a job description first.")
         else:
             api_key = os.getenv("GROQ_API_KEY")
             if not api_key:
@@ -243,14 +241,14 @@ One brutally honest sentence summarizing this job opportunity.
 JOB DESCRIPTION:
 {job_desc}
 """
-            with st.spinner("Bypassing corporate jargon... ⚡"):
+            with st.spinner("Analyzing corporate jargon... ⚡"):
                 try:
                     response = client.chat.completions.create(
                         model="llama-3.3-70b-versatile",
                         messages=[{"role": "user", "content": prompt}],
                         max_tokens=1500
                     )
-                    st.success("Decode Sequence Complete.")
+                    st.success("Analysis Complete!")
                     st.markdown(response.choices[0].message.content)
                 except Exception as e:
                     st.error(f"Error: {str(e)}")
@@ -261,29 +259,29 @@ JOB DESCRIPTION:
 with tab2:
     st.markdown("""
     <div class="hero-container">
-        <div class="hero-title">Beat The ATS</div>
+        <div class="hero-title">Smart Resume Matcher</div>
         <div class="hero-subtitle">
-            <span class="viral-hook">Force multiply your interview rate.</span>
-            Upload your resume and the target job description. The algorithm will reverse-engineer the ATS filters and tell you exactly which bullet points are holding you back.
+            <span class="viral-hook">See your resume through the eyes of the ATS. 🎯</span>
+            Upload your resume and the target job description. The algorithm will score your fit and tell you exactly which bullet points to rewrite to land the interview.
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     uploaded_resume = st.file_uploader("Upload your resume (PDF format)", type=["pdf"])
     
-    st.markdown('<span class="input-label" style="margin-top: 1rem;">Target Coordinates // Paste Job Description</span>', unsafe_allow_html=True)
+    st.markdown('<span class="input-label" style="margin-top: 1rem;">🎯 PASTE THE TARGET JOB DESCRIPTION</span>', unsafe_allow_html=True)
     job_target = st.text_area(
         label="job_target",
         height=200,
-        placeholder="Paste the target job description here to align the algorithm...",
+        placeholder="Paste the target job description here to check your match score...",
         label_visibility="collapsed"
     )
 
-    grade_btn = st.button("Execute Resume Analysis 🎯", type="primary", use_container_width=True, key="btn_grade")
+    grade_btn = st.button("Score my resume fit 📊", type="primary", use_container_width=True, key="btn_grade")
 
     if grade_btn:
         if not uploaded_resume or not job_target.strip():
-            st.error("⚠️ Data missing: Please provide both the PDF and the job description.")
+            st.error("⚠️ Please provide both your PDF resume and the job description.")
         else:
             pdf_reader = PyPDF2.PdfReader(uploaded_resume)
             resume_text = ""
@@ -327,14 +325,14 @@ JOB DESCRIPTION:
 RESUME TEXT:
 {resume_text}
 """
-            with st.spinner("Analyzing parameters against target requirements... 🕵️‍♂️"):
+            with st.spinner("Scoring resume against job requirements... 🕵️‍♂️"):
                 try:
                     response = client.chat.completions.create(
                         model="llama-3.3-70b-versatile",
                         messages=[{"role": "user", "content": prompt}],
                         max_tokens=1500
                     )
-                    st.success("Analysis Complete.")
+                    st.success("Scoring Complete!")
                     st.markdown(response.choices[0].message.content)
                 except Exception as e:
                     st.error(f"Error reading or analyzing: {str(e)}")
