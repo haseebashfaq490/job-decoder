@@ -126,19 +126,16 @@ st.markdown("""
     }
 
     /* --- AGGRESSIVE FILE UPLOADER FIX --- */
-    /* Target the main dropzone container */
     [data-testid="stFileUploader"] > section {
         background-color: #1e293b !important;
         border: 2px dashed #475569 !important;
         border-radius: 16px !important;
     }
-    /* Force all text inside the uploader to be bright */
     [data-testid="stFileUploader"] div, 
     [data-testid="stFileUploader"] span, 
     [data-testid="stFileUploader"] small {
         color: #e2e8f0 !important;
     }
-    /* Target the exact 'Browse files' button Streamlit generates */
     [data-testid="stFileUploader"] button {
         background: linear-gradient(135deg, #334155 0%, #1e293b 100%) !important;
         color: #ffffff !important;
@@ -201,8 +198,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- APP LAYOUT (TABS) ---
-tab1, tab2 = st.tabs(["🔍 Job Decoder", "📄 Resume Grader"])
+# --- APP LAYOUT (3 TABS) ---
+tab1, tab2, tab3 = st.tabs(["🔍 Job Decoder", "📄 Resume Grader", "🎙️ Interview Prep"])
 
 # ==========================================
 # TAB 1: JOB DECODER
@@ -362,3 +359,64 @@ RESUME TEXT:
                     st.markdown(response.choices[0].message.content)
                 except Exception as e:
                     st.error(f"Error reading or analyzing: {str(e)}")
+
+# ==========================================
+# TAB 3: INTERVIEW PREP
+# ==========================================
+with tab3:
+    st.markdown("""
+    <div class="hero-container">
+        <div class="hero-title">AI Interview Coach</div>
+        <div class="hero-subtitle">
+            <span class="viral-hook">Anticipate their hardest questions. 🎙️</span>
+            Paste the job description below. The AI will act as a veteran hiring manager and generate the 5-6 most difficult questions you will face for this specific role, plus a strategy to answer them.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<span class="input-label">🎯 PASTE THE TARGET JOB DESCRIPTION</span>', unsafe_allow_html=True)
+    job_interview = st.text_area(
+        label="job_interview",
+        height=280,
+        placeholder="Paste the job description here to generate tailored interview questions...",
+        label_visibility="collapsed"
+    )
+
+    prep_btn = st.button("Generate Interview Questions 🧠", type="primary", use_container_width=True, key="btn_prep")
+
+    if prep_btn:
+        if not job_interview.strip():
+            st.error("⚠️ Please paste a job description first.")
+        else:
+            api_key = os.getenv("GROQ_API_KEY")
+            if not api_key:
+                st.error("⚠️ System Error: GROQ_API_KEY is not set.")
+                st.stop()
+                
+            client = Groq(api_key=api_key)
+            prompt = f"""You are a tough, veteran Hiring Manager and Technical Recruiter.
+Based on the job description provided, generate the 5 to 6 most challenging, highly specific interview questions a candidate will face for this exact role. 
+
+Do not ask generic questions like "What are your strengths?". Base them specifically on the required skills and daily responsibilities mentioned in the text.
+
+Format your response exactly like this for each question:
+
+## [Question Number]. [Insert the difficult question here]
+* **Why they are asking this:** [1 sentence explaining the hidden motive or concern behind the question]
+* **How to answer (STAR Method):** [Give a brief strategy on how to structure the answer using Situation, Task, Action, Result. Mention exactly which skills from the JD they should highlight]
+
+---
+JOB DESCRIPTION:
+{job_interview}
+"""
+            with st.spinner("Generating rigorous interview questions... 💭"):
+                try:
+                    response = client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=[{"role": "user", "content": prompt}],
+                        max_tokens=1500
+                    )
+                    st.success("Interview Prep Ready!")
+                    st.markdown(response.choices[0].message.content)
+                except Exception as e:
+                    st.error(f"Error generating questions: {str(e)}")
