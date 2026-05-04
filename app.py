@@ -2,12 +2,13 @@ import streamlit as st
 from groq import Groq
 from dotenv import load_dotenv
 import os
+import PyPDF2 # New import for reading PDFs
 
 load_dotenv()
 
 st.set_page_config(
-    page_title="Job Description Decoder",
-    page_icon="🔍",
+    page_title="Career AI Toolkit",
+    page_icon="🚀",
     layout="centered"
 )
 
@@ -36,12 +37,12 @@ st.markdown("""
     /* Hero Section Styling */
     .hero-container {
         text-align: center;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
         animation: fadeIn 0.8s ease-out;
     }
 
     .hero-title {
-        font-size: 3.8rem;
+        font-size: 3.5rem;
         font-weight: 800;
         letter-spacing: -0.02em;
         background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
@@ -53,7 +54,7 @@ st.markdown("""
 
     .hero-subtitle {
         font-size: 1.15rem;
-        color: #e4e4e7; /* BRIGHTENED from previous muted gray */
+        color: #e4e4e7;
         max-width: 650px;
         margin: 0 auto 1.5rem auto;
         line-height: 1.6;
@@ -67,49 +68,39 @@ st.markdown("""
         margin-bottom: 0.5rem;
     }
 
-    /* Feature Pills */
-    .pill-container {
-        display: flex;
-        justify-content: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-        margin-bottom: 2rem;
+    /* Target Streamlit Tabs */
+    button[data-baseweb="tab"] {
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #a1a1aa !important;
+        background-color: transparent !important;
     }
-    .feature-pill {
-        background: rgba(99, 102, 241, 0.15);
-        border: 1px solid rgba(99, 102, 241, 0.4);
-        color: #c7d2fe; /* Brightened text */
-        padding: 0.4rem 1rem;
-        border-radius: 9999px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        backdrop-filter: blur(4px);
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #818cf8 !important;
     }
 
-    /* Target Streamlit's Native Text Area - FIXED CONTRAST */
-    div[data-baseweb="textarea"] > div {
-        background-color: rgba(9, 9, 11, 0.8) !important; /* Darker background */
-        border: 1px solid #3f3f46 !important; /* Brighter border */
+    /* Target Streamlit's Native Text Area & File Uploader */
+    div[data-baseweb="textarea"] > div,
+    [data-testid="stFileUploadDropzone"] {
+        background-color: rgba(9, 9, 11, 0.8) !important;
+        border: 1px dashed #3f3f46 !important;
         border-radius: 12px;
         transition: all 0.2s ease;
     }
-    div[data-baseweb="textarea"] > div:hover {
-        border-color: #52525b !important;
-    }
-    div[data-baseweb="textarea"] > div:focus-within {
+    div[data-baseweb="textarea"] > div:focus-within,
+    [data-testid="stFileUploadDropzone"]:hover {
         border-color: #6366f1 !important;
         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
         background-color: rgba(9, 9, 11, 0.95) !important;
     }
     textarea {
-        color: #ffffff !important; /* Bright white text when typing */
+        color: #ffffff !important;
         font-size: 1rem !important;
         padding: 1rem !important;
         line-height: 1.6 !important;
     }
     textarea::placeholder {
-        color: #a1a1aa !important; /* Brightened placeholder text so it's readable */
+        color: #a1a1aa !important;
     }
 
     /* Target Streamlit's Native Primary Button */
@@ -119,7 +110,7 @@ st.markdown("""
         border: none !important;
         border-radius: 12px !important;
         padding: 1.5rem !important;
-        font-size: 1.2rem !important; /* Made button text slightly larger */
+        font-size: 1.2rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.02em !important;
         transition: all 0.3s ease !important;
@@ -129,19 +120,6 @@ st.markdown("""
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6) !important;
         background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
-    }
-
-    /* Secondary Download Button */
-    button[kind="secondary"] {
-        background: rgba(39, 39, 42, 0.8) !important;
-        border: 1px solid #52525b !important;
-        color: #ffffff !important;
-        border-radius: 8px !important;
-        transition: all 0.2s ease !important;
-    }
-    button[kind="secondary"]:hover {
-        border-color: #6366f1 !important;
-        background: rgba(63, 63, 70, 1) !important;
     }
 
     /* Output Markdown Styling */
@@ -154,22 +132,14 @@ st.markdown("""
         padding-bottom: 0.5rem !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
+    .stMarkdown h3 {
+        color: #818cf8 !important;
+        font-size: 1.1rem !important;
+    }
     .stMarkdown p, .stMarkdown li {
-        color: #e4e4e7 !important; /* Brightened output text */
+        color: #e4e4e7 !important;
         font-size: 1.05rem !important;
         line-height: 1.7 !important;
-    }
-    .stMarkdown strong {
-        color: #ffffff !important;
-    }
-
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] {
-        background-color: #09090b !important;
-        border-right: 1px solid #27272a !important;
-    }
-    [data-testid="stSidebar"] * {
-        color: #e4e4e7 !important; /* Forced all sidebar text to be brighter */
     }
     
     /* Input Label styling */
@@ -189,71 +159,44 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR ---
-with st.sidebar:
-    st.markdown("### 🔍 How to use")
+# --- APP LAYOUT (TABS) ---
+tab1, tab2 = st.tabs(["🔍 Job Decoder", "📄 Resume Grader"])
+
+# ==========================================
+# TAB 1: JOB DECODER
+# ==========================================
+with tab1:
     st.markdown("""
-    1. Find any job on LinkedIn or Indeed
-    2. Copy the entire job post text
-    3. Paste it into the box
-    4. Click **Decode this job**
-    """)
-    st.divider()
-    st.markdown("### 🎯 What you get")
-    st.markdown("""
-    - ✅ Plain-English translation
-    - 🚩 Hidden red flags  
-    - 💰 Salary estimate
-    - 🎯 Top 5 skills to highlight
-    - 🔮 The one-line truth
-    """)
-    st.divider()
-    st.markdown("<small style='color:#a1a1aa'>Built with Groq + Llama 3<br>Open source</small>", unsafe_allow_html=True)
-
-# --- HERO SECTION ---
-st.markdown("""
-<div class="hero-container">
-    <div class="hero-title">Job Description Decoder</div>
-    <div class="hero-subtitle">
-        <span class="viral-hook">Decode any job description in 10 seconds. ⚡</span>
-        Stop guessing. Paste the corporate jargon below and let AI reveal the hidden red flags, the <em>real</em> salary range, and exactly what to say to get hired.
+    <div class="hero-container">
+        <div class="hero-title">Job Description Decoder</div>
+        <div class="hero-subtitle">
+            <span class="viral-hook">Decode any job description in 10 seconds. ⚡</span>
+            Stop guessing. Paste the corporate jargon below and let AI reveal the hidden red flags, the <em>real</em> salary range, and exactly what to say to get hired.
+        </div>
     </div>
-    <div class="pill-container">
-        <span class="feature-pill">🚩 Red Flag Detector</span>
-        <span class="feature-pill">💰 Salary Estimator</span>
-        <span class="feature-pill">🎯 Skill Matcher</span>
-        <span class="feature-pill">🔮 Culture Translator</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-# --- INPUT SECTION ---
-st.markdown('<span class="input-label">📋 PASTE JOB DESCRIPTION BELOW</span>', unsafe_allow_html=True)
+    st.markdown('<span class="input-label">📋 PASTE JOB DESCRIPTION BELOW</span>', unsafe_allow_html=True)
+    job_desc = st.text_area(
+        label="job_decode",
+        height=280,
+        placeholder="e.g. 'We are looking for a rockstar fast-paced developer to wear many hats...'",
+        label_visibility="collapsed"
+    )
 
-job_desc = st.text_area(
-    label="job",
-    height=280,
-    placeholder="e.g. 'We are looking for a rockstar fast-paced developer to wear many hats...'",
-    label_visibility="collapsed"
-)
+    decode_btn = st.button("🚀 Decode this job now", type="primary", use_container_width=True, key="btn_decode")
 
-decode_btn = st.button("🚀 Decode this job now", type="primary", use_container_width=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# --- APP LOGIC ---
-if decode_btn:
-    if not job_desc.strip():
-        st.error("⚠️ Please paste a job description first.")
-    else:
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            st.error("⚠️ GROQ_API_KEY is not set in the environment variables.")
-            st.stop()
-            
-        client = Groq(api_key=api_key)
-
-        prompt = f"""You are an expert recruiter and career coach with 15 years of experience. A job seeker needs your honest, no-fluff analysis.
+    if decode_btn:
+        if not job_desc.strip():
+            st.error("⚠️ Please paste a job description first.")
+        else:
+            api_key = os.getenv("GROQ_API_KEY")
+            if not api_key:
+                st.error("⚠️ GROQ_API_KEY is not set.")
+                st.stop()
+                
+            client = Groq(api_key=api_key)
+            prompt = f"""You are an expert recruiter and career coach with 15 years of experience. A job seeker needs your honest, no-fluff analysis.
 
 Analyze this job description and respond using EXACTLY these 7 sections with these exact headings:
 
@@ -281,30 +224,100 @@ One brutally honest sentence summarizing this job opportunity.
 JOB DESCRIPTION:
 {job_desc}
 """
+            with st.spinner("Decoding corporate jargon... ⚡"):
+                try:
+                    response = client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=[{"role": "user", "content": prompt}],
+                        max_tokens=1500
+                    )
+                    st.success("Analysis Complete!")
+                    st.markdown(response.choices[0].message.content)
+                except Exception as e:
+                    st.error(f"Error: {str(e)}")
 
-        with st.spinner("Decoding corporate jargon... ⚡"):
-            try:
-                response = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
-                    messages=[{"role": "user", "content": prompt}],
-                    max_tokens=1500
-                )
-                result = response.choices[0].message.content
 
-                st.success("Analysis Complete!")
+# ==========================================
+# TAB 2: RESUME GRADER
+# ==========================================
+with tab2:
+    st.markdown("""
+    <div class="hero-container">
+        <div class="hero-title">Resume Grader</div>
+        <div class="hero-subtitle">
+            <span class="viral-hook">Beat the ATS. 🎯</span>
+            Upload your resume and paste the job description. AI will score your fit and tell you exactly which bullet points to rewrite.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    uploaded_resume = st.file_uploader("Upload your resume (PDF)", type=["pdf"])
+    
+    st.markdown('<span class="input-label" style="margin-top: 1rem;">📋 PASTE JOB DESCRIPTION</span>', unsafe_allow_html=True)
+    job_target = st.text_area(
+        label="job_target",
+        height=200,
+        placeholder="Paste the target job description here...",
+        label_visibility="collapsed"
+    )
+
+    grade_btn = st.button("📈 Score my resume", type="primary", use_container_width=True, key="btn_grade")
+
+    if grade_btn:
+        if not uploaded_resume or not job_target.strip():
+            st.error("⚠️ Please upload a PDF resume AND paste a job description.")
+        else:
+            # Extract text from PDF
+            pdf_reader = PyPDF2.PdfReader(uploaded_resume)
+            resume_text = ""
+            for page in pdf_reader.pages:
+                resume_text += page.extract_text()
+
+            api_key = os.getenv("GROQ_API_KEY")
+            if not api_key:
+                st.error("⚠️ GROQ_API_KEY is not set.")
+                st.stop()
                 
-                with st.container():
-                    st.markdown(result)
-                
-                st.markdown("<br>", unsafe_allow_html=True)
-                
-                st.download_button(
-                    label="⬇️ Download full analysis as .txt",
-                    data=result,
-                    file_name="job_decode.txt",
-                    mime="text/plain",
-                    use_container_width=True
-                )
-                
-            except Exception as e:
-                st.error(f"An error occurred while communicating with the AI: {str(e)}")
+            client = Groq(api_key=api_key)
+            prompt = f"""You are an elite Technical Recruiter and ATS (Applicant Tracking System) algorithm. 
+I am going to provide you with my RESUME and a JOB DESCRIPTION.
+
+Please grade my resume out of 100 based on how well it fits this job description. 
+Use EXACTLY the following structure and headings:
+
+## Overall Match Score: [Insert Score]/100
+Give a brief 2-sentence verdict on my chances of getting an interview.
+
+## 📊 Dimension Breakdowns
+Score each out of 100 and provide a one-sentence justification.
+* **Keyword Match:** [Score]/100 - [Justification]
+* **Experience Relevance:** [Score]/100 - [Justification]
+* **Impact & Metrics:** [Score]/100 - [Justification]
+* **ATS Friendliness:** [Score]/100 - [Justification]
+
+## 🔴 Critical Gaps
+What are the top 2-3 things missing from my resume that this job description explicitly asks for?
+
+## ✍️ Bullet Point Rewrites
+Identify 2 weak bullet points from my resume and rewrite them to be stronger, more metric-driven, and better aligned with the job description. Format as:
+* **Original:** [Quote my bullet]
+* **Upgraded:** [Your improved rewrite]
+
+---
+JOB DESCRIPTION:
+{job_target}
+
+RESUME TEXT:
+{resume_text}
+"""
+            with st.spinner("Analyzing resume against job requirements... 🕵️‍♂️"):
+                try:
+                    response = client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=[{"role": "user", "content": prompt}],
+                        max_tokens=1500
+                    )
+                    st.success("Scoring Complete!")
+                    st.markdown(response.choices[0].message.content)
+                except Exception as e:
+                    st.error(f"Error reading or analyzing: {str(e)}")
