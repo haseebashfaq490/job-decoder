@@ -125,29 +125,29 @@ st.markdown("""
         opacity: 1 !important;
     }
 
-    /* --- FILE UPLOADER FIXES --- */
-    [data-testid="stFileUploadDropzone"] {
+    /* --- AGGRESSIVE FILE UPLOADER FIX --- */
+    /* Target the main dropzone container */
+    [data-testid="stFileUploader"] > section {
         background-color: #1e293b !important;
         border: 2px dashed #475569 !important;
-        border-radius: 16px;
-        padding: 2rem !important;
+        border-radius: 16px !important;
     }
-    [data-testid="stFileUploadDropzone"]:hover {
-        border-color: #0ea5e9 !important;
-        background-color: #0f172a !important;
+    /* Force all text inside the uploader to be bright */
+    [data-testid="stFileUploader"] div, 
+    [data-testid="stFileUploader"] span, 
+    [data-testid="stFileUploader"] small {
+        color: #e2e8f0 !important;
     }
-    /* Force inner text to be bright */
-    [data-testid="stFileUploadDropzone"] * {
-        color: #f8fafc !important;
-    }
-    /* Style the "Browse files" button */
-    [data-testid="stFileUploadDropzone"] button {
-        background-color: #334155 !important;
+    /* Target the exact 'Browse files' button Streamlit generates */
+    [data-testid="stFileUploader"] button {
+        background: linear-gradient(135deg, #334155 0%, #1e293b 100%) !important;
         color: #ffffff !important;
         border: 1px solid #475569 !important;
         border-radius: 8px !important;
+        font-weight: 600 !important;
+        padding: 0.5rem 1rem !important;
     }
-    [data-testid="stFileUploadDropzone"] button:hover {
+    [data-testid="stFileUploader"] button:hover {
         border-color: #0ea5e9 !important;
         color: #0ea5e9 !important;
     }
@@ -210,7 +210,7 @@ tab1, tab2 = st.tabs(["🔍 Job Decoder", "📄 Resume Grader"])
 with tab1:
     st.markdown("""
     <div class="hero-container">
-        <div class="hero-title">Job Description Translator</div>
+        <div class="hero-title">Job Description Decoder</div>
         <div class="hero-subtitle">
             <span class="viral-hook">Cut through corporate jargon in 10 seconds. ⚡</span>
             Stop guessing what hiring managers want. Paste the job post below and let AI reveal the hidden red flags, the true salary range, and the exact skills they are filtering for.
@@ -292,7 +292,6 @@ with tab2:
     </div>
     """, unsafe_allow_html=True)
 
-    # Added custom high-contrast label instead of standard invisible label
     st.markdown('<span class="input-label">📄 UPLOAD YOUR RESUME (PDF)</span>', unsafe_allow_html=True)
     uploaded_resume = st.file_uploader("resume_uploader", type=["pdf"], label_visibility="collapsed")
     
