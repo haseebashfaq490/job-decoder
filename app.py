@@ -126,16 +126,19 @@ st.markdown("""
     }
 
     /* --- AGGRESSIVE FILE UPLOADER FIX --- */
+    /* Target the main dropzone container */
     [data-testid="stFileUploader"] > section {
         background-color: #1e293b !important;
         border: 2px dashed #475569 !important;
         border-radius: 16px !important;
     }
+    /* Force all text inside the uploader to be bright */
     [data-testid="stFileUploader"] div, 
     [data-testid="stFileUploader"] span, 
     [data-testid="stFileUploader"] small {
         color: #e2e8f0 !important;
     }
+    /* Target the exact 'Browse files' button Streamlit generates */
     [data-testid="stFileUploader"] button {
         background: linear-gradient(135deg, #334155 0%, #1e293b 100%) !important;
         color: #ffffff !important;
@@ -357,22 +360,5 @@ RESUME TEXT:
                     )
                     st.success("Scoring Complete!")
                     st.markdown(response.choices[0].message.content)
-                    
-                    # --- THE LINKEDIN FLEX CARD ---
-                    st.markdown("---")
-                    st.markdown("<h3 style='color: #bae6fd;'>📸 Flex on LinkedIn</h3>", unsafe_allow_html=True)
-                    st.markdown("<p style='color: #94a3b8;'>Click the copy icon in the top right of the box below to share your ATS-proof resume with your network. Just fill in your score and role before posting!</p>", unsafe_allow_html=True)
-                    
-                    flex_post = """🚀 Just put my resume through the Smart Resume Matcher and scored a [Insert Score]/100 for a [Insert Role] position! 
-
-🎯 Keyword Match: Optimized
-📊 Impact Metrics: High
-🚩 Red Flags: ZERO.
-
-My resume is officially ATS-proof. If you are job hunting, you need to test your resume against the algorithm here:
-👉 https://job-decoder.streamlit.app"""
-
-                    st.code(flex_post, language="markdown")
-
                 except Exception as e:
                     st.error(f"Error reading or analyzing: {str(e)}")
